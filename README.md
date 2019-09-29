@@ -49,11 +49,11 @@ In the file usrcmd.c you need to make three changes
 3. Write your actual function
 
 ### Add function prototype
-The function prototype of commands is
+The function prototype for command functions is:
 ```
 typedef int (*USRCMDFUNC)(int argc, char **argv);
 ```
-Then I could create a user command function by making the prototype
+Here is an example of a command function prototype that will print out the arguments.
 ```
 static int usrcmd_printargs(int argc, char **argv);
 ```
