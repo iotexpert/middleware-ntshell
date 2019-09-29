@@ -3,11 +3,11 @@ An MBED Implementation of NTShell
 
 This library a modified (very slightly) version of the Natural Tiny Shell by Shinichiro Nakamura (CuBeatSystems).  This project his hosted at https://www.cubeatsystems.com/ntshell/
 
-The NTShell is a really simple shell for smallish embedded systems.  It understands VT100 terminal projects and provides nice features like command history.
+The NTShell is a really simple shell for smallish embedded systems.  It understands VT100 terminals and provides nice features like command history.
 
-I configured the ntshell to work with stdin/stdout using normal printf, getchar, putchar etc.
+I provided a configuration of ntshell that works with stdin/stdout using normal printf, getchar, putchar etc.
 
-Inside of the project I included a template directory which contains the NTShell inside of a thread (ntShellThread.h/c) and all of the user commands inside of usrcmd.h/c
+Inside of the project I included a template directory which contains the NTShell inside of a thread (ntShellThread.h/c) and an example of some user commands inside of usrcmd.h/c
 
 As a developer you can add commands to the shell by adding code to the usrcmd.h/.c
 
