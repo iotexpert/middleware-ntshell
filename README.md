@@ -58,7 +58,7 @@ Then I could create a user command function by making the prototype
 static int usrcmd_printargs(int argc, char **argv);
 ```
 ### Add function to command table
-The command table is an array of structures.  The sturcture contains the 
+The command table is an array of structures.  The structure contains: 
 * A string of the command
 * A text description - used by help
 * A function pointer to the command
