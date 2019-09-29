@@ -30,6 +30,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "ntShellThread.h"
+
 #include "ntopt.h"
 #include "ntlibc.h"
 #include "ntshell.h"
@@ -41,6 +43,7 @@ static int usrcmd_ntopt_callback(int argc, char **argv, void *extobj);
 static int usrcmd_help(int argc, char **argv);
 static int usrcmd_info(int argc, char **argv);
 static int usrcmd_clear(int argc, char **argv);
+static int usrcmd_printargs(int argc, char **argv);
 
 typedef struct {
     char *cmd;
@@ -52,6 +55,7 @@ static const cmd_table_t cmdlist[] = {
     { "help", "This is a description text string for help command.", usrcmd_help },
     { "info", "This is a description text string for info command.", usrcmd_info },
     { "clear", "Clear the screen", usrcmd_clear },
+    { "printargs","print the list of arguments", usrcmd_printargs},
 
 };
 
@@ -66,7 +70,7 @@ static int usrcmd_ntopt_callback(int argc, char **argv, void *extobj)
         return 0;
     }
     const cmd_table_t *p = &cmdlist[0];
-    for (int i = 0; i < sizeof(cmdlist) / sizeof(cmdlist[0]); i++) {
+    for (unsigned int i = 0; i < sizeof(cmdlist) / sizeof(cmdlist[0]); i++) {
         if (ntlibc_strcmp((const char *)argv[0], p->cmd) == 0) {
             return p->func(argc, argv);
         }
@@ -79,7 +83,7 @@ static int usrcmd_ntopt_callback(int argc, char **argv, void *extobj)
 static int usrcmd_help(int argc, char **argv)
 {
     const cmd_table_t *p = &cmdlist[0];
-    for (int i = 0; i < sizeof(cmdlist) / sizeof(cmdlist[0]); i++) {
+    for (unsigned int i = 0; i < sizeof(cmdlist) / sizeof(cmdlist[0]); i++) {
         printf("%s",p->cmd);
         printf("%s","\t:");
         printf("%s",p->desc);
@@ -89,7 +93,6 @@ static int usrcmd_help(int argc, char **argv)
     return 0;
 }
 
-extern ntshell_t ntshell;
 
 static int usrcmd_info(int argc, char **argv)
 {
@@ -115,4 +118,16 @@ static int usrcmd_clear(int argc, char **argv)
 {
     vtsend_erase_display_home(&ntshell.vtsend);
     return 0;
+}
+
+static int usrcmd_printargs(int argc, char **argv)
+{
+    printf("ARGC = %d\n",argc);
+
+    for(int i =0;i<argc;i++)
+    {
+        printf("argv[%d] = %s\n",i,argv[i]);
+    }
+    return 0;
+
 }
