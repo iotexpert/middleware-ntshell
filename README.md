@@ -11,7 +11,7 @@ Inside of the project I included a template directory which contains the NTShell
 
 As a developer you can add commands to the shell by adding code to the usrcmd.h/.c
 
-## To use this project
+## To use ntshell inside of your project
 To use this project add it to your mbed project with
 * mbed add git@github.com:iotexpert/mbed-os-ntshell.git
 * 
@@ -20,11 +20,10 @@ To use this project add it to your mbed project with
 Then copy the template files into your project
 * cp mbed-os-ntshell/template/* .
 
-Finally modify your project to start the ntShellThread
+Finally modify your main.cpp to start the ntShellThread
 
 ```
 #include "mbed.h"
-
 #include "ntShellThread.h"
 
 Thread ntShellThreadHandle;
