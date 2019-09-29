@@ -14,7 +14,7 @@ As a developer you can add commands to the shell by adding code to the usrcmd.h/
 ## To use ntshell inside of your project
 To use this project add it to your mbed project with
 * mbed add git@github.com:iotexpert/mbed-os-ntshell.git
-* 
+
 * mbed add https://github.com/iotexpert/mbed-os-ntshell.git
 
 Then copy the template files into your project
@@ -42,3 +42,8 @@ int main()
 
 }
 ```
+### To add commands
+In the file usrcmd.c you need to make three changes
+1. Add a function prototype for your command
+2. Add the new command to the cmdlist array
+3. Write your actual function
