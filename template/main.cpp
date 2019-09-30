@@ -1,23 +1,18 @@
 #include "mbed.h"
+#include "ntShellThread.h"
 
-#include "ntshell.h"
-#include "ntlibc.h"
-#include "mbed_port.h"
+Thread ntShellThreadHandle;
 
-ntshell_t ntshell;
+DigitalOut led1(LED1);
 
-
-int main(void)
+int main()
 {
+    printf("Started NTShellThread\n");
+    ntShellThreadHandle.start(ntShellThread);
+    while(1)
+    {
+        led1 = !led1;
+        ThisThread::sleep_for(500);
+    }
 
-  ntshell_init(
-      &ntshell,
-      ntshell_read,
-      ntshell_write,
-      ntshell_callback,
-      (void *)&ntshell);
-  ntshell_set_prompt(&ntshell, "BlueTank>");
-  vtsend_erase_display(&ntshell.vtsend);
-  ntshell_execute(&ntshell);
-  return 0;
 }
