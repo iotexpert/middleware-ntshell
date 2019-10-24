@@ -13,7 +13,7 @@ Inside of the project I included a template directory which contains example cod
 # How to add to the PSoC6 SDK
 To use this with a project you need to create a "dot lib" file inside of your project.  That file should contain the URL for the library.
 * Create a file middleware-nthshell.lib
-* In that file put "https://github.com/iotexpert/middleware-ntshell.git"
+* In that file put "https://github.com/iotexpert/middleware-ntshell/#master"
 * On the command line run "make getlibs"
 * Copy the usrcmd.h.c into your project "cp libs/middleware-ntshell/template/psoc6sdk/usrcmd.* ."
 
