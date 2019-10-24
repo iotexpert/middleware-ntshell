@@ -129,6 +129,7 @@ int vtsend_erase_display_home(vtsend_t *p)
 {
     vtsend_erase_display(p);
     vtsend_cursor_home(p);
+    return 0;
 }
 
 
