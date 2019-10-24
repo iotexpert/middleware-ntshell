@@ -11,10 +11,10 @@ I provided a configuration of ntshell that works with stdin/stdout using normal 
 Inside of the project I included a template directory which contains example code which will work with MBED and the PSoC 6 SDK.  In both cases the NTShell is located inside of a thread and both examples include some user commands inside of usrcmd.h/c
 
 # How to add to the PSoC6 SDK
-To use this with a project you need to create a "dot lib" file inside of your project.  That file should contain the URL for the library.
+To use this with a project you need to create a "dot lib" file inside of your project.  That file should contain the URL for the library.  On the command line you need to run the three commands:
 * echo "https://github.com/iotexpert/middleware-ntshell/#master" > middleware-ntshell.lib
-* On the command line run "make getlibs"
-* Copy the usrcmd.h.c into your project "cp libs/middleware-ntshell/template/psoc6sdk/usrcmd.* ."
+* make getlibs
+* cp libs/middleware-ntshell/template/psoc6sdk/usrcmd.* .
 
 Then modify your main.c to include the neccesary includes
 
