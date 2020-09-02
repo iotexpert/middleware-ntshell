@@ -20,6 +20,7 @@ int ntshell_write(const char *buf, int cnt, void *extobj)
   for (i = 0; i < cnt; i++) {
     putchar(buf[i]);
   }
+  fflush(stdout);
   return cnt;
 }
 
