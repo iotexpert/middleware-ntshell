@@ -36,7 +36,10 @@
 #include "ntshell.h"
 #include <stdio.h>
 
-extern ntshell_t ntshell;
+#include "ntshell.h"
+#include "ntlibc.h"
+#include "psoc6_ntshell_port.h"
+static ntshell_t ntshell;
 
 typedef int (*USRCMDFUNC)(int argc, char **argv);
 
@@ -44,7 +47,7 @@ static int usrcmd_ntopt_callback(int argc, char **argv, void *extobj);
 static int usrcmd_help(int argc, char **argv);
 static int usrcmd_info(int argc, char **argv);
 static int usrcmd_clear(int argc, char **argv);
-static int usrcmd_printargs(int argc, char **argv);
+static int usrcmd_pargs(int argc, char **argv);
 
 typedef struct {
     char *cmd;
@@ -56,9 +59,26 @@ static const cmd_table_t cmdlist[] = {
     { "help", "This is a description text string for help command.", usrcmd_help },
     { "info", "This is a description text string for info command.", usrcmd_info },
     { "clear", "Clear the screen", usrcmd_clear },
-    { "printargs","print the list of arguments", usrcmd_printargs},
+    { "pargs","print the list of arguments", usrcmd_pargs},
 
 };
+
+
+void usrcmd_task()
+{
+
+  printf("Started ntshell\n");
+  setvbuf(stdin, NULL, _IONBF, 0);
+  ntshell_init(
+	       &ntshell,
+	       ntshell_read,
+	       ntshell_write,
+	       ntshell_callback,
+	       (void *)&ntshell);
+  ntshell_set_prompt(&ntshell, "BlueTank>");
+  vtsend_erase_display(&ntshell.vtsend);
+  ntshell_execute(&ntshell);
+}
 
 int usrcmd_execute(const char *text)
 {
@@ -121,7 +141,7 @@ static int usrcmd_clear(int argc, char **argv)
     return 0;
 }
 
-static int usrcmd_printargs(int argc, char **argv)
+static int usrcmd_pargs(int argc, char **argv)
 {
     printf("ARGC = %d\n",argc);
 

@@ -38,7 +38,9 @@ extern "C"
 {
 #endif
 
+void usrcmd_task();
 int usrcmd_execute(const char *text);
+
 
 #ifdef __cplusplus
 } // extern "C"
