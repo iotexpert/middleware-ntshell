@@ -10,10 +10,35 @@ I provided a configuration of ntshell that works with stdin/stdout using normal 
 
 Inside of the project I included a template directory which contains example code which will work with MBED and the PSoC 6 SDK.  In both cases the NTShell is located inside of a thread and both examples include some user commands inside of usrcmd.h/c
 
-# How to add to the PSoC6 SDK
+# Add library to your Modus Toolbox project using the library manager
+By far the easiest way to add this library to your project is to update your Library manager to know about the IoT Expert projects, middleware and board support packages.  To do this update the file "~/.modustoolbox/manifest.loc" by adding
+* https://github.com/iotexpert/mtb2-iotexpert-manifests/raw/master/iotexpert-super-manifest.xml
+
+I describe this in detail at
+https://github.com/iotexpert/mtb2-iotexpert-manifests
+
+When you start the library manager you will now see the IoT Expert Library with NT Shell.
+
+# How to manually add ntshell library using Modus 2.2 (Modus Flow)
+For the "Modus Flow" you need to create a file called "deps/middleware-ntshell.mtb" with a connection to the project.  The easiest method to create this is:
+* echo "https://github.com/iotexpert/middleware-ntshell#latest-v2.X#$$ASSET_REPO$$/middleware-ntshell/latest-v2.X" > deps/middleware-ntshell.mtb
+* make getlibs
+
+# How to manually add ntshell library using Modus 2.1 (dot lib flow)
+If you are using the "dot lib flow from Modus Toolbox 2.1" you can create a dot lib like this:
+
 To use this with a project you need to create a "dot lib" file inside of your project.  That file should contain the URL for the library.  On the command line you need to run the three commands:
 * echo "https://github.com/iotexpert/middleware-ntshell/#master" > middleware-ntshell.lib
 * make getlibs
+
+# How to update your PSoC AnyCloud Project
+
+First, copy the template usrcmd.h and usrcmd.c from the correct location either
+../mtb_shared/middleware-ntshell/latest-v2.X/
+* cp ../mtb_shared/middleware-ntshell/latest-v2.X/template/psoc6sdk/usrcmd.* .
+
+or
+
 * cp libs/middleware-ntshell/template/psoc6sdk/usrcmd.* .
 
 Then modify your main.c to include the neccesary includes
@@ -32,29 +57,27 @@ ntshell_t ntshell;
 Write the code for the actual task
 
 ```
-void ntShellTask()
+void nts_task()
 {
+    printf("Started NT Shell\n");
+    setvbuf(stdin, NULL, _IONBF, 0);
 
-  printf("Started ntshell\n");
-  setvbuf(stdin, NULL, _IONBF, 0);
-  ntshell_init(
-	       &ntshell,
+    ntshell_init(
+	       &nts_shell,
 	       ntshell_read,
 	       ntshell_write,
 	       ntshell_callback,
-	       (void *)&ntshell);
-  ntshell_set_prompt(&ntshell, "BlueTank>");
-  vtsend_erase_display(&ntshell.vtsend);
-  ntshell_execute(&ntshell);
+	       (void *)&nts_shell);
+    ntshell_set_prompt(&nts_shell, "AnyCloud $ ");
+    vtsend_erase_display(&nts_shell.vtsend);
+    ntshell_execute(&nts_shell);
 }
-
-// this will start the task
 ```
 
 Then add the startup of the task
 
 ```
-xTaskCreate(ntShellTask, "nt shell task", configMINIMAL_STACK_SIZE*2,0 /* args */ ,0 /* priority */, 0);
+xTaskCreate(nts_task, "nt shell task", configMINIMAL_STACK_SIZE*4,0 /* args */ ,0 /* priority */, 0);
 ```
 
 
