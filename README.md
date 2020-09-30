@@ -20,7 +20,7 @@ https://github.com/iotexpert/mtb2-iotexpert-manifests
 When you start the library manager you will now see the IoT Expert Library with NT Shell.
 
 # How to manually add ntshell library using Modus 2.2 (Modus Flow)
-For the "Modus Flow" you need to create a file called "deps/middleware-ntshell.mtb" with a connection to the project.  The easiest method to create this is:
+For the "Modus Flow" you need to create a file called "deps/middleware-ntshell.mtb" with a connection to the library.  The easiest method to create this is:
 * echo "https://github.com/iotexpert/middleware-ntshell#latest-v2.X#$$ASSET_REPO$$/middleware-ntshell/latest-v2.X" > deps/middleware-ntshell.mtb
 * make getlibs
 
@@ -31,9 +31,10 @@ To use this with a project you need to create a "dot lib" file inside of your pr
 * echo "https://github.com/iotexpert/middleware-ntshell/#master" > middleware-ntshell.lib
 * make getlibs
 
-# How to update your PSoC AnyCloud Project
+# Get the source templates
+To get everything going the easiest thing to do is coply the command templates into your project.
 
-First, copy the template usrcmd.h and usrcmd.c from the correct location either
+Copy the template usrcmd.h and usrcmd.c from the correct location either
 ../mtb_shared/middleware-ntshell/latest-v2.X/
 * cp ../mtb_shared/middleware-ntshell/latest-v2.X/template/psoc6sdk/usrcmd.* .
 
