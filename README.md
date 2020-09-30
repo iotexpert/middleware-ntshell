@@ -35,7 +35,7 @@ To use this with a project you need to create a "dot lib" file inside of your pr
 To get everything going the easiest thing to do is coply the command templates into your project.
 
 Copy the template usrcmd.h and usrcmd.c from the correct location either
-../mtb_shared/middleware-ntshell/latest-v2.X/
+
 * cp ../mtb_shared/middleware-ntshell/latest-v2.X/template/psoc6sdk/usrcmd.* .
 
 or
