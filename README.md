@@ -10,6 +10,8 @@ I provided a configuration of ntshell that works with stdin/stdout using normal 
 
 Inside of the project I included a template directory which contains example code which will work with MBED and the PSoC 6 SDK.  In both cases the NTShell is located inside of a thread and both examples include some user commands inside of usrcmd.h/c
 
+I built a thread inside of usrcmd.c which you will need to start wherever you start the other threads.  The task function is named usrcmd_task and is defined in usrcmd.h
+
 # Add library to your Modus Toolbox project using the library manager
 By far the easiest way to add this library to your project is to update your Library manager to know about the IoT Expert projects, middleware and board support packages.  To do this update the file "~/.modustoolbox/manifest.loc" by adding
 * https://github.com/iotexpert/mtb2-iotexpert-manifests/raw/master/iotexpert-super-manifest.xml
@@ -45,37 +47,10 @@ or
 Then modify your main.c to include the neccesary includes
 
 ```
-#include "ntshell.h"
-#include "ntlibc.h"
-#include "psoc6_ntshell_port.h"
-```
-Then declare a global variable to hold the shell.
-
-```
-// Global variable with a handle to the shell
-ntshell_t ntshell;
-```
-Write the code for the actual task
-
-```
-void nts_task()
-{
-    printf("Started NT Shell\n");
-    setvbuf(stdin, NULL, _IONBF, 0);
-
-    ntshell_init(
-	       &nts_shell,
-	       ntshell_read,
-	       ntshell_write,
-	       ntshell_callback,
-	       (void *)&nts_shell);
-    ntshell_set_prompt(&nts_shell, "AnyCloud $ ");
-    vtsend_erase_display(&nts_shell.vtsend);
-    ntshell_execute(&nts_shell);
-}
+#include "usrcmd.h"
 ```
 
-Then add the startup of the task
+Then add the startup of the task (which is defined in usercmd.h)
 
 ```
 xTaskCreate(nts_task, "nt shell task", configMINIMAL_STACK_SIZE*4,0 /* args */ ,0 /* priority */, 0);
