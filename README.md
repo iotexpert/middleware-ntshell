@@ -50,7 +50,7 @@ Then modify your main.c to include the neccesary includes
 #include "usrcmd.h"
 ```
 
-Then add the startup of the task (which is defined in usercmd.h)
+Then add the startup of the task (which is defined in usercmd.h).  The ntshell inside of the usrcmd_task function uses stdio and needs more stack.  I picked 4 empircally by printing out stack sizes.
 
 ```
 xTaskCreate(nts_task, "nt shell task", configMINIMAL_STACK_SIZE*4,0 /* args */ ,0 /* priority */, 0);

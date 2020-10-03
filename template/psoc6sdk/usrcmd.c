@@ -39,6 +39,10 @@
 #include "ntshell.h"
 #include "ntlibc.h"
 #include "psoc6_ntshell_port.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+
 static ntshell_t ntshell;
 
 typedef int (*USRCMDFUNC)(int argc, char **argv);
@@ -48,6 +52,11 @@ static int usrcmd_help(int argc, char **argv);
 static int usrcmd_info(int argc, char **argv);
 static int usrcmd_clear(int argc, char **argv);
 static int usrcmd_pargs(int argc, char **argv);
+#ifdef configUSE_TRACE_FACILITY
+#if configUSE_STATS_FORMATTING_FUNCTIONS ==1
+static int usrcmd_list(int argc, char **argv);
+#endif
+#endif
 
 typedef struct {
     char *cmd;
@@ -60,22 +69,26 @@ static const cmd_table_t cmdlist[] = {
     { "info", "This is a description text string for info command.", usrcmd_info },
     { "clear", "Clear the screen", usrcmd_clear },
     { "pargs","print the list of arguments", usrcmd_pargs},
-
+#ifdef configUSE_TRACE_FACILITY 
+#if configUSE_STATS_FORMATTING_FUNCTIONS ==1
+    { "tasks","print the list of RTOS Tasks", usrcmd_list},
+#endif
+#endif
 };
 
 
 void usrcmd_task()
 {
 
-  printf("Started ntshell\n");
   setvbuf(stdin, NULL, _IONBF, 0);
+  printf("Started user command task with NT Shell\n");
   ntshell_init(
 	       &ntshell,
 	       ntshell_read,
 	       ntshell_write,
 	       ntshell_callback,
 	       (void *)&ntshell);
-  ntshell_set_prompt(&ntshell, "BlueTank>");
+  ntshell_set_prompt(&ntshell, "AnyCloud> ");
   vtsend_erase_display(&ntshell.vtsend);
   ntshell_execute(&ntshell);
 }
@@ -152,3 +165,22 @@ static int usrcmd_pargs(int argc, char **argv)
     return 0;
 
 }
+
+#ifdef configUSE_TRACE_FACILITY
+#if configUSE_STATS_FORMATTING_FUNCTIONS ==1
+static int usrcmd_list(int argc,char **argv)
+{
+    // 40 bytes/task + some margin
+    char buff[40*10 + 100];
+
+    vTaskList( buff );
+    printf("Name          State Priority   Stack  Num\n");
+    printf("------------------------------------------\n");
+    printf("%s",buff);
+
+    printf("‘B’ – Blocked\n‘R’ – Ready\n‘D’ – Deleted (waiting clean up)\n‘S’ – Suspended, or Blocked without a timeout\n");
+    printf("Stack = bytes free at highwater\n");
+    return 0;
+}
+#endif
+#endif
